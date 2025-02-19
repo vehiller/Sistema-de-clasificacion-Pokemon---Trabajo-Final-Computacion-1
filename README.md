@@ -15,7 +15,7 @@
 2. Abre RStudio y configura el proyecto.
 3. Ejecuta los scripts en el siguiente orden:
    - `teoria.R`
-   - `analisis.R`
+   - `analisis.py`
    - `dashboard.R`
 
 ## Autores
