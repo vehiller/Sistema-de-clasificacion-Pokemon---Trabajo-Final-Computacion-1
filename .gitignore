@@ -13,7 +13,6 @@
 
 # Datos grandes o sensibles (personaliza según tus necesidades)
 data/*.xlsx
-data/*.csv
 outputs/*.png
 
 
