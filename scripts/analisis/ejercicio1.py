@@ -1,6 +1,6 @@
 # Análisis estadístico desarrollado por Alirio
 cat("Aquí se realizarán los cálculos y gráficos.\n")
-# Parte desarrollada por Alirio Guerrero, análisis estadístico del 1 al 5
+# Parte desarrollada por Alirio Guerrero, análisis estadístico.
 # Ejercicio 1, calcular la frecuencia de type1 y type2 de Pokemones y la frecuencia en habilidades.
 
 
