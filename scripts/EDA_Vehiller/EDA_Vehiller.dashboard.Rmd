@@ -1,12 +1,26 @@
 ---
-title: "EDA_Vehiller.dasboard"
+title: "EDA_Vehiller.dashboard"
 author: "vehiller Dwindt"
 date: "2025-03-07"
 output: html_document
+encoding: UTF-8 # aqui se Especifica la codificación
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Cargar la librería utils
+library(utils)
+
+# Cargar la base de datos
+pokemon <- read.csv("C:/Users/AsistMinisterial/Documents/GitHub/Sistema-de-clasificaci-n-Pokemon---Trabajo-Final-Computaci-n-1/data/pokemon.csv", fileEncoding = "UTF-8")
+
+# Verificar la carga de datos
+head(pokemon, 10)  # Muestra las primeras 10 filas
+
+tail(pokemon, 3) # Muestra las últimas 3 filas
+
+str(pokemon)
+
+summary(pokemon)
 ```
 
 ## R Markdown
