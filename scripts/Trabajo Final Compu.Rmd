@@ -1,0 +1,49 @@
+---
+title: "Sistema de clasificacion Pokemon"
+author: "D'windt Vehiller, Guerrero Alirio, Hidalgo Breiner"
+date: "2025-03-04"
+output: pdf_document
+---
+
+Planteamiento del Problema
+
+En el mundo competitivo del videojuego Pokémon Showdown, la selección de un equipo equilibrado como estrategia es clave para lograr el éxito en batalla. Esto no solo requiere de un vasto conocimiento sobre los distintos tipos elementales (agua, fuego, planta, etc.) y habilidades especiales de cada Pokémon, sino también de un profundo entendimiento de cómo estas características interactúan entre sí y responden a las mecánicas mismas del juego. Si bien existen guías basadas en las experiencias y opiniones de jugadores avanzados, no se cuenta con un análisis sistemático y objetivo que permita evaluar cuáles combinaciones de tipo y habilidad podrían maximizar la competitividad de un Pokémon.
+
+En el mundo competitivo del videojuego Pokémon Showdown, la selección de un equipo equilibrado como estrategia es clave para lograr el éxito en batalla. Esto no solo requiere de un vasto conocimiento sobre los distintos tipos elementales (agua, fuego, planta, etc.) y habilidades especiales de cada Pokémon, sino también de un profundo entendimiento de cómo estas características interactúan entre sí y responden a las mecánicas mismas del juego. Si bien existen guías basadas en las experiencias y opiniones de jugadores avanzados, no se cuenta con un análisis sistemático y objetivo que permita evaluar cuáles combinaciones de tipo y habilidad podrían maximizar la competitividad de un Pokémon.
+
+El inconveniente está en que la clasificación tradicional basada únicamente en tipos elementales ofrece una visión limitada, ya que muchos Pokémon comparten el mismo tipo, pero desempeñan roles muy distintos debido a sus habilidades únicas y comportamientos específicos en combate. Tomando en cuenta además, la creciente complejidad del juego, entre su más de 1000 especies disponibles desde Generación III hasta Generación IX, lo que dificulta aún más la toma de decisiones informadas por parte de los jugadores.
+
+De aquí que, surge la pregunta de investigación: ¿Cómo se pueden utilizar herramientas de estadísticas descriptivas para analizar y clasificar la distribución de tipos y habilidades de los Pokémon en Pokémon Showdown, identificando patrones relevantes que optimicen su competitividad en equipos de batalla?
+
+Este estudio procura ofrecer una solución a dicha situación a través de un análisis estructurado que permita ver las interacciones entre las variables "tipo" y "habilidades", proporcionando así una base sólida para la formación de equipos competitivos.
+
+Justificación de la Investigación
+
+La presente investigación tiene al menos, 3 justificaciones: teórica, práctica y pedagógica.
+
+Análisis exhaustivo de datos: El uso de la estadística permite resumir y visualizar grandes cantidades de datos como la que posee la base de datos de Pokémon aquí estudiada. Esto permite indenticar tendencias generales y variaciones específicas dentro de las categorías de tipos y habilidades, ayudando así al entendimiento de cómo estas características influyen en la competitividad.
+
+Gestión de decisiones estratégicas: Con el aporte de una metodología objetiva para evaluar la competitividad de los Pokémon, esta investigación le proporciona a los jugadores una valiosa herramienta para tomar decisiones al momento de formar sus equipos haciendo uso de datos concretos en vez de solo valerse de recomendaciones basadas en experiencias personaes.
+
+Impacto en el entorno de los videojuegos competitivos: Este estudio puede hacer un aporte a la búsqueda de profundizar la comprensión en el campo de la estadística aplicada a los videojuegos, mostrando cómo las herramientas cuantitativas pueden mejorar la experiencia de los jugadores y optimizar los resultados en entornos virtuales. Esto de hecho, podría motivar la realización de nvestigaciones similares en otros juegos y plataformas.
+
+Valor educativo: Este trabajo tiene el potencial de servir de ejemplo sobre la aplicación de conceptos estadísticos en el mundo del entretenimiento, al analizar fenómenos reales vinculados con un videojuego como Pokémon. Esto también  despierta el interés y la motivación de estudiantes y aficionados para aprender sobre técnicas estadísticas y su utilidad práctica.
+
+Todo esto además sirve para subir el nivel intelectual del jugador ya que ñas técnicas descriptivas utilizadas en este estudio son sencillas de comprender e interpretar, lo cual hace que la investigación sea accesible incluso para jugadores con conocimientos básicos de estadística. Esto fomenta una mayor participación y comprensión del juego competitivo.
+
+Límites y Alcances
+
+Esta investigación está enmarcada dentro de los siguientes límites y alcances:
+
+1. Base de datos: Se utilizará la base de datos proporcionada, esto incluye Pokémon de generación III a generación VIII, junto con algunas entradas seleccionadas de generación IX. Esto garantiza una muestra representativa sin sobrecargar el análisis con demasiadas variantes recientes.
+
+2. Enfoque descriptivo e inferencial: Aunque el análisis principal será descriptivo (como frecuencias, medidas de tendencia central y dispersión), se incorporarán algunos elementos inferenciales básicos para investigar posibles correlaciones entre las variables estudiadas. No obstante, no se desarrollarán modelos predictivos avanzado.
+
+3. Alcance de los roles estratégicos: No se plantearán estrategias completas ni se intentará desarrollar un algoritmo óptimo para la formación de equipos, pero si se detallarán las distribuciones de variables relacionadas con distintos roles estratégicos (como atacantes físicos o especialistas defensivos). El propósito es describir a los Pokémon según sus atributos clave y permitir que los jugadores ajusten estos descubrimientos a sus propias necesidades tácticas.
+
+4. Limitación de variables: El estudio solo estará enfocado en las variables "tipo" (primario y secundario) y "habilidades". Otras variables como movimientos, ítems, estadísticas base y roles específicos (tanques, atacantes, soporte) quedarán fuera del análisis con el fin de mantener un enfoque específico y controlado.
+
+5. Optimización parcial: Con este estudio se proporcionar una herramienta para identificar patrones y tendencias que puedan orientar la selección de Pokémon, pero no se pretende seleccionar al equipo ideal.
+
+Marco Teórico
+

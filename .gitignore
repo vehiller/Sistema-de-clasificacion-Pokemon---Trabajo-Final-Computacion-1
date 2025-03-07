@@ -1,0 +1,54 @@
+# ==============================
+# Reglas para R
+# ==============================
+
+# Archivos temporales de R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Archivos generados por RStudio
+*.rds
+*.log
+
+# Datos grandes o sensibles (personaliza según tus necesidades)
+data/*.xlsx
+outputs/*.png
+
+
+# ==============================
+# Reglas para Python
+# ==============================
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+
+# Archivos generados por herramientas de Python
+*.egg-info/
+dist/
+build/
+
+# Archivos de configuración local
+.vscode/
+.idea/
+
+
+# ==============================
+# Reglas multiplataforma
+# ==============================
+
+# Archivos temporales del sistema operativo
+.DS_Store       # macOS
+Thumbs.db       # Windows
+
+# Archivos generados por editores de texto
+*.tmp
+*~
