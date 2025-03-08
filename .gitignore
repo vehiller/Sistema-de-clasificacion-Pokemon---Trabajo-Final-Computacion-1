@@ -52,3 +52,4 @@ Thumbs.db       # Windows
 # Archivos generados por editores de texto
 *.tmp
 *~
+scripts/EDA_Vehiller/EDA_Vehiller.dashboard.html

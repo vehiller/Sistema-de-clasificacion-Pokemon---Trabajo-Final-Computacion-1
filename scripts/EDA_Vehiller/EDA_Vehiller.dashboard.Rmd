@@ -28,25 +28,120 @@ summary(pokemon)
 ```{r cargar_librerias} 
 # Cargar librerías necesarias para análisis univariante
 
-pacman::p_load(
-  tidyverse,      # Manipulación y visualización de datos
-  highcharter,    # Gráficos interactivos estilo JS
-  ggalluvial,     # Gráficos de flujo (para relaciones bivariadas)
-  viridis,        # Paletas de colores profesionales
-  hrbrthemes,     # Temas estéticos para ggplot2
-  gt,             # Tablas formateadas
-  formattable,    # Tablas interactivas
-  ggfx            # Efectos visuales
-)
+library(tidyverse)
+library(gt)
+library(viridis)
+library(ggrepel)
+library(hrbrthemes)
 
 ```
+# **2. Preparación de Datos**
+```{r preparacion}
+# Separar habilidades en formato largo (asumiendo que están separadas por comas)
+pokemon_abilities <- pokemon %>%
+  separate_rows(abilities, sep = ", ") %>%  # Separa habilidades por comas
+  filter(!is.na(abilities)) 
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+# Frecuencias de tipos
+type1_freq <- pokemon %>% count(type1, name = "n") %>% arrange(desc(n))
+type2_freq <- pokemon %>% count(type2, name = "n") %>% drop_na(type2) %>% arrange(desc(n))
+abilities_freq <- pokemon_abilities %>% count(abilities, name = "n") %>% arrange(desc(n))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# **3. Análisis Univariado**
+
+## **3.1. Tipos Primarios (type1)**
+```{r univariado_type1}
+ggplot(type1_freq, aes(x = reorder(type1, n), y = n, fill = type1)) +
+  geom_col(alpha = 0.9, width = 0.7) +
+  geom_label(aes(label = n), fill = "white", size = 3.5) +
+  scale_fill_viridis(discrete = TRUE, option = "plasma") +
+  labs(title = "Distribución de Tipos Primarios", x = NULL, y = "Frecuencia") +
+  coord_flip() +
+  theme_bw(base_size = 14) +  # Usando theme_bw en lugar de theme_ipsum
+  theme(legend.position = "none")
+```
+## **3.2. Tipos Secundarios (type2)**
+```{r univariado_type2}
+type2_freq %>%
+  gt() %>%
+  tab_header(
+    title = md("**Frecuencia de Tipos Secundarios**"),
+    subtitle = "Orden descendente"
+  ) %>%
+  data_color(
+    columns = n,
+    colors = scales::col_numeric(palette = viridis(10), domain = NULL)
+  ) %>%
+  fmt_number(columns = n, decimals = 0)
+```
+## **4.1. Combinaciones Type1-Type2**
+```{r bivariado_heatmap}
+pokemon %>%
+  count(type1, type2) %>%
+  drop_na(type2) %>%
+  ggplot(aes(x = type1, y = type2, fill = n)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = n), color = "black", size = 3.5) +
+  scale_fill_viridis(option = "magma", name = "Frecuencia") +
+  labs(
+    title = "Mapa de Calor: Combinaciones de Tipos",
+    x = "Tipo Primario",
+    y = "Tipo Secundario"
+  ) +
+  theme_bw(base_size = 14) +  # Usando theme_bw en lugar de theme_ipsum
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+## **5.1. Top 10 Habilidades**
+```{r top_10_habilidades}
+# Crear un dataframe con las habilidades separadas y sus frecuencias
+habilidades_separadas <- pokemon %>%
+  separate_rows(abilities, sep = ", ") %>%  # Separa habilidades por comas
+  filter(!is.na(abilities)) %>%             # Elimina filas con habilidades NA
+  count(abilities, name = "n") %>%          # Cuenta la frecuencia de cada habilidad
+  arrange(desc(n))                          # Ordena de mayor a menor
+
+# Filtrar solo las 10 habilidades más comunes
+top_10_habilidades <- habilidades_separadas %>%
+  slice_max(n, n = 10)                      # Selecciona las 10 habilidades más frecuentes
+
+# Gráfico de barras para las 10 habilidades más comunes
+ggplot(top_10_habilidades, aes(x = reorder(abilities, n), y = n)) +
+  geom_col(fill = "#2c3e50", alpha = 0.8) + # Barras con color y transparencia
+  geom_label(aes(label = n), fill = "#e74c3c", color = "white", size = 3.5) + # Etiquetas con valores
+  coord_flip() +                            # Barras horizontales
+  labs(
+    title = "Top 10 Habilidades más Comunes",
+    x = NULL,
+    y = "Frecuencia"
+  ) +
+  theme_minimal(base_size = 14) +           # Tema minimalista con tamaño de fuente
+  theme(
+    axis.text.y = element_text(size = 12),  # Tamaño del texto en el eje Y
+    plot.title = element_text(size = 16, face = "bold") # Título en negrita
+  )
+```
+# **6. Tabla Interactiva (Tipo1 vs Habilidades)**
+```{r tabla_interactiva}
+# Crear un dataframe con habilidades separadas y tipos primarios
+habilidades_por_tipo <- pokemon %>%
+  separate_rows(abilities, sep = ", ") %>%  # Separa habilidades por comas
+  filter(!is.na(abilities)) %>%             # Elimina filas con habilidades NA
+  group_by(type1, abilities) %>%            # Agrupa por tipo primario y habilidad
+  summarise(n = n(), .groups = "drop") %>%  # Cuenta la frecuencia
+  group_by(type1) %>%                       # Agrupa solo por tipo primario
+  slice_max(n, n = 3)                       # Selecciona las 3 habilidades más comunes por tipo
+
+# Crear tabla interactiva con gt
+habilidades_por_tipo %>%
+  gt() %>%
+  tab_header(
+    title = md("**Habilidades más Comunes por Tipo Primario**"),
+    subtitle = "Top 3 habilidades por tipo"
+  ) %>%
+  data_color(
+    columns = n,
+    colors = scales::col_numeric(palette = viridis(10), domain = NULL)
+  ) %>%
+  fmt_number(columns = n, decimals = 0)      # Formato de números sin decimales
+```
