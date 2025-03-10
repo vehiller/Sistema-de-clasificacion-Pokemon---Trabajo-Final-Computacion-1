@@ -1,5 +1,5 @@
 # Parte desarrollada por Alirio Guerrero, análisis estadístico.
-# 2. Análisis de Combinaciones de Tipos:
+# 2 y 3. Análisis de Combinaciones de Tipos y habilidades:
 # Calcular la frecuencia de cada combinación única de Type1 y Type2.
 # Visualizar las combinaciones más comunes.
 
@@ -56,3 +56,7 @@ def analizar_combinaciones(csv_file, columna1, columna2):
 
 # Análisis de combinaciones de tipos
 analizar_combinaciones('DBPokemons.csv', 'type1', 'type2')
+# Análisis de combinaciones por habilidades y tipo primario
+analizar_combinaciones('DBPokemons.csv', 'abilities', 'type1')
+
+
