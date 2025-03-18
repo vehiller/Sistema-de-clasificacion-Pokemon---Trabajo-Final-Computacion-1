@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Cargar datos del archivo CSV
-data = pd.read_csv("DBPokemons.csv", sep=';')
+data = pd.read_csv("DBPokemons.csv", sep=',')
 
 # Diccionario de efectividad ampliado basado en la base de datos
 type_effectiveness = {

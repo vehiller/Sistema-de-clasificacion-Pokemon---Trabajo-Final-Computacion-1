@@ -14,7 +14,7 @@ def analizar_combinaciones(csv_file, columna1, columna2):
     combinaciones = Counter()
     
     with open(csv_file, mode='r', encoding='utf-8') as archivo:
-        lector_csv = csv.DictReader(archivo, delimiter=';')
+        lector_csv = csv.DictReader(archivo, delimiter=',')
         for fila in lector_csv:
             combinacion = (fila[columna1], fila[columna2])
             combinaciones[combinacion] += 1

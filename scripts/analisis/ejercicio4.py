@@ -13,7 +13,7 @@ def analizar_combinaciones_interactivas(csv_file, columna1, columna2, columna_ha
 
     # Leer archivo CSV y agrupar habilidades por combinación de tipos
     with open(csv_file, mode='r', encoding='utf-8') as archivo:
-        lector_csv = csv.DictReader(archivo, delimiter=';')
+        lector_csv = csv.DictReader(archivo, delimiter=',')
         for fila in lector_csv:
             combinacion = (fila[columna1], fila[columna2])
             habilidades = fila[columna_habilidades].split()
