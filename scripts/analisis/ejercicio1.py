@@ -33,7 +33,7 @@ def procesar_columna(csv_file, columna):
     # Leo el archivo CSV y extrae los datos de la columna especificada
     lista_datos = [] # Creo la variable para guardar los datos de esa columna
     with open(csv_file, mode='r', encoding='utf-8') as archivo: # Abro el CSV en modo lectura
-        lector_csv = csv.DictReader(archivo, delimiter=';') # Leo cada fila del CSV y la guardo en un diccionario
+        lector_csv = csv.DictReader(archivo, delimiter=',') # Leo cada fila del CSV y la guardo en un diccionario
         for fila in lector_csv:
             lista_datos.append(fila[columna])  # Añado los datos de la columna especificada a la lista de datos
 
@@ -104,7 +104,7 @@ def mostrar_analisis(csv_file, columna):
 ver_analisis = input("Seleccione el analisis de frecuencia que desea ver \n --> type1 |1| type2 |2| abilities |3| : ") # Pulsar el num de opción
 
 if ver_analisis == '1':
-   mostrar_analisis('DBPokemons.csv', 'type1') # Frecuencias de la columna type1
+    ('DBPokemons.csv', 'type1') # Frecuencias de la columna type1
 
 elif ver_analisis == '2':
     mostrar_analisis('DBPokemons.csv', 'type2') # Frecuencias de la columna type2
