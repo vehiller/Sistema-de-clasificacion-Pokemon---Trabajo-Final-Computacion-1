@@ -86,8 +86,189 @@ output: pdf_document
 \end{enumerate}
 
  \hspace{1cm} Las dos variables interactúan de manera intrincada, lo cual demanda un análisis minucioso para determinar las combinaciones óptimas que potencien la competitividad.
+\newpage
+\begin{center}
+\textbf{Gráficos}
+\end{center}
+
+```{r setup, echo = FALSE, warning = FALSE}
+library(reticulate)
+use_python("C:/Users/brein/AppData/Local/Programs/Python/Python313/", required = TRUE)
+#py_config()
+#py_install("pandas")
+#use_virtualenv("~/.virtualenvs/r-reticulate/Scripts/python.exe")
+```
+
+```{python, echo = FALSE}
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar datos del archivo CSV
+data = pd.read_csv("DBPokemons.csv", sep=',')
+
+# Diccionario de efectividad ampliado basado en la base de datos
+type_effectiveness = {
+    "Fuego": {"resistencias": ["Planta", "Hielo", "Bicho", "Acero", "Fuego", "Hada"],
+              "debilidades": ["Agua", "Tierra", "Roca"]},
+    "Agua": {"resistencias": ["Fuego", "Tierra", "Roca", "Agua", "Acero"],
+             "debilidades": ["Planta", "Eléctrico"]},
+    "Eléctrico": {"resistencias": ["Eléctrico", "Acero", "Volador"],
+                  "debilidades": ["Tierra"]},
+    "Planta": {"resistencias": ["Agua", "Tierra", "Eléctrico", "Planta"],
+               "debilidades": ["Fuego", "Hielo", "Veneno", "Volador", "Bicho"]},
+    "Hielo": {"resistencias": ["Hielo"],
+              "debilidades": ["Fuego", "Lucha", "Roca", "Acero"]},
+    "Lucha": {"resistencias": ["Bicho", "Roca", "Siniestro"],
+              "debilidades": ["Volador", "Psíquico", "Hada"]},
+    "Veneno": {"resistencias": ["Planta", "Lucha", "Veneno", "Bicho", "Hada"],
+               "debilidades": ["Tierra", "Psíquico"]},
+    "Tierra": {"resistencias": ["Veneno", "Roca"],
+               "debilidades": ["Agua", "Planta", "Hielo"]},
+    "Volador": {"resistencias": ["Planta", "Lucha", "Bicho"],
+                "debilidades": ["Eléctrico", "Hielo", "Roca"]},
+    "Psíquico": {"resistencias": ["Lucha", "Psíquico"],
+                 "debilidades": ["Bicho", "Siniestro", "Fantasma"]},
+    "Bicho": {"resistencias": ["Planta", "Lucha", "Tierra"],
+              "debilidades": ["Fuego", "Volador", "Roca"]},
+    "Roca": {"resistencias": ["Normal", "Fuego", "Veneno", "Volador"],
+             "debilidades": ["Agua", "Planta", "Lucha", "Tierra", "Acero"]},
+    "Fantasma": {"resistencias": ["Veneno", "Bicho"],
+                 "debilidades": ["Siniestro", "Fantasma"]},
+    "Dragón": {"resistencias": ["Fuego", "Agua", "Eléctrico", "Planta"],
+               "debilidades": ["Hielo", "Dragón", "Hada"]},
+    "Siniestro": {"resistencias": ["Fantasma", "Siniestro", "Psíquico"],
+                  "debilidades": ["Lucha", "Bicho", "Hada"]},
+    "Acero": {"resistencias": ["Normal", "Planta", "Hielo", "Volador", "Psíquico", "Bicho", "Roca", "Dragón", "Acero", "Hada"],
+              "debilidades": ["Fuego", "Lucha", "Tierra"]},
+    "Hada": {"resistencias": ["Lucha", "Bicho", "Siniestro"],
+             "debilidades": ["Veneno", "Acero"]}
+}
+
+# Crear un diccionario de puntaje para habilidades basado en habilidades únicas extraídas de la BD
+ability_scores = {
+    "Adaptability": 40, "Aerilate": 50, "Aftermath": 30, "Analytic": 35, 
+    "Anger Point": 20, "Anticipation": 10, "Arena Trap": 50, "Armor Tail": 35, 
+    "Aura Break": 20, "Bad Dreams": 40, "Ball Fetch": 5, "Battle Armor": 20,
+    "Beads of Ruin": 50, "Berserk": 25, "Big Pecks": 10, "Blaze": 15,
+    "Bulletproof": 35, "Cheek Pouch": 10, "Chilling Neigh": 45, "Chlorophyll": 30, 
+    "Clear Body": 40, "Cloud Nine": 25, "Color Change": 20, "Commander": 50, 
+    "Compound Eyes": 35, "Contrary": 50, "Corrosion": 30, "Costar": 20,
+    "Cotton Down": 25, "Cursed Body": 30, "Cute Charm": 15, "Dancer": 30, 
+    "Dark Aura": 45, "Dauntless Shield": 50, "Defeatist": 5, "Defiant": 40, 
+    "Delta Stream": 50, "Desolate Land": 50, "Disguise": 50, "Download": 45, 
+    "Dragon's Maw": 50, "Drizzle": 50, "Drought": 50, "Dry Skin": 20, 
+    "Early Bird": 15, "Earth Eater": 50, "Effect Spore": 25, "Electric Surge": 50,
+    "Emergency Exit": 10, "Fairy Aura": 45, "Filter": 40, "Flame Body": 20, 
+    "Flare Boost": 30, "Flash Fire": 30, "Flower Gift": 15, "Flower Veil": 10, 
+    "Forecast": 15, "Forewarn": 10, "Friend Guard": 10, "Frisk": 15, 
+    "Full Metal Body": 50, "Fur Coat": 50, "Gale Wings": 40, "Gluttony": 20, 
+    "Good as Gold": 50, "Gooey": 30, "Grassy Surge": 50, "Grim Neigh": 45, 
+    "Guard Dog": 30, "Guts": 40, "Hadron Engine": 50, "Harvest": 35, 
+}
+
+# Función para calcular puntaje de efectividad de tipos
+def calculate_type_score(type1, type2):
+    resistencias = set()
+    debilidades = set()
+    for t in [type1, type2]:
+        if pd.isna(t): continue
+        resistencias.update(type_effectiveness.get(t, {}).get("resistencias", []))
+        debilidades.update(type_effectiveness.get(t, {}).get("debilidades", []))
+    return len(resistencias) - len(debilidades)
+
+# Calcular BST
+data["BST"] = data[["hp", "atk", "def", "spatk", "spdef", "speed"]].sum(axis=1)
+
+# Calcular Puntaje Tipos
+data["Puntaje Tipos"] = data.apply(lambda x: calculate_type_score(x["type1"], x["type2"]), axis=1)
+
+# Calcular Puntaje Habilidad
+data["Puntaje Habilidad"] = data["abilities"].apply(
+    lambda x: sum(ability_scores.get(ab.strip(), 0) for ab in str(x).split()) if pd.notna(x) else 0
+)
+
+# Calcular Competitividad
+data["Competitividad"] = data["BST"] + (data["Puntaje Tipos"] * 10) + data["Puntaje Habilidad"]
+
+# Mostrar los 10 Pokémon más competitivos
+top_10 = data.sort_values("Competitividad", ascending=False)[["name", "type1", "type2", "abilities", "Competitividad"]].head(10)
+#print(top_10)
+
+plt.figure(figsize=(12, 6))
+sns.barplot(
+    x="Competitividad",
+    y="name",
+    data=top_10,
+    palette="viridis"
+)
+
+# Detalles del gráfico
+plt.title("Top 10 Pokémon más competitivos", fontsize=16)
+plt.xlabel("Puntaje de Competitividad", fontsize=12)
+plt.ylabel("Nombre del Pokémon", fontsize=12)
+plt.tight_layout()
+
+# Mostrar gráfico
+plt.show()
+```
+\hspace{1cm}A continuacion daremos informacion sobre el indice de competitividad de los 10 pokemones mas destacados de acuerdo a este indice. Este indice no es mas que la suma conjunta o el total de todas las medidas o valores referidos a estrategias de defensa y ataque, rapidez, etc, asociadas a cada uno de estos pokemones, algunos de los cuales son legendarios y otros son miticos. De este ranking tenemos que arceus posee el puntaje mas alto, siendo este de 720. Lo llamativo es que la diferencia entre el puntaje mas alto y el mas bajo no es abrumadora. Ademas de arceus y eternatus, este ultimo con el segundo mejor puntaje, los ocho pokemones restantes mantienen un puntaje similar o igual. Si consideramos esta careacteristica regularidad presente en 8 de los diez puntajes observados con la diferencia nada abismal entre el puntaje maximo y el puntaje minimo, es evidente que el grado de dispercion o disgregacion entre estos puntajes muy minimo. Dicho de otro modo, los puntajes tienden mostrar una escasa disgregación entre sí.
+
+```{python, echo = FALSE, warning = FALSE}
+import csv
+from collections import Counter
+import matplotlib.pyplot as plt
+import seaborn as sns        
+        
+
+# Función para analizar combinaciones de tipos
+def analizar_combinaciones(csv_file, columna1, columna2):
+    combinaciones = Counter()
+    
+    with open(csv_file, mode='r', encoding='utf-8') as archivo:
+        lector_csv = csv.DictReader(archivo, delimiter=',')
+        for fila in lector_csv:
+            combinacion = (fila[columna1], fila[columna2])
+            combinaciones[combinacion] += 1
+    
+    #print(f"\nFrecuencia de cada combinación de {columna1} y {columna2}:")
+    #for combinacion, frecuencia in combinaciones.items():
+        #print(f"{combinacion}: {frecuencia}")
+    
+    # Encuentro la clave asociada al valor máximo y mínimo
+    frecuencia_maxima = max(combinaciones, key=combinaciones.get)
+    frecuencia_minima = min(combinaciones, key=combinaciones.get)
+
+    # Obtengo los valores máximo y mínimo usando las claves encontradas
+    valor_maximo = combinaciones[frecuencia_maxima]
+    valor_minimo = combinaciones[frecuencia_minima]
+
+    # Creo un nuevo diccionario con los resultados
+    frecuencia_max_min = {
+        'frecuencia_maxima': (frecuencia_maxima, valor_maximo),
+        'frecuencia_minima': (frecuencia_minima, valor_minimo)
+    }
+
+    # Imprimo el nuevo diccionario
+    #for clave, (key, value) in frecuencia_max_min.items():
+       # print(f"{clave} ({key}): {value}")
+
+    # Graficar las combinaciones más comunes
+    datos = ["+".join(combinacion) for combinacion in combinaciones.keys()]
+    valores = list(combinaciones.values())
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x=datos, y=valores, palette="viridis")
+    
+    plt.title(f'Frecuencia de combinaciones de {columna1} y {columna2}')
+    plt.xlabel('Combinaciones')
+    plt.ylabel('Frecuencia')
+    plt.xticks(rotation=90)
+    plt.show()
 
 
-
-
+# Análisis de combinaciones de tipos
+analizar_combinaciones('DBPokemons.csv', 'type1', 'type2')
+# Análisis de combinaciones por habilidades y tipo primario
+analizar_combinaciones('DBPokemons.csv', 'abilities', 'type1')
+```
 
