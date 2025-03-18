@@ -143,7 +143,7 @@ server <- function(input, output, session) {
   
   # Cargar y preprocesar los datos
   pokemon <- reactive({
-    read.csv("C:/Users/AsistMinisterial/Documents/GitHub/Sistema-de-clasificaci-n-Pokemon---Trabajo-Final-Computaci-n-1/data/pokemon.csv", fileEncoding = "UTF-8") %>%  # Asegúrate de que la ruta sea correcta
+    read.csv("C:/Users/AsistMinisterial/Documents/GitHub/Sistema-de-clasificacion-Pokemon---Trabajo-Final-Computacion-1/data/pokemon.csv", fileEncoding = "UTF-8") %>%  # Asegúrate de que la ruta sea correcta
       rename_with(~ tolower(gsub("[^a-zA-Z0-9]", "", .x))) %>%
       mutate(
         type1 = as.factor(gsub("[^a-zA-Z0-9]", "", type1)),
